@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jackson & Florence — Wedding</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --blue-1:#3b82f6;--blue-2:#60a5fa;--accent:#1e3a8a;
+    }
+    body{font-family:'Poppins',sans-serif;background:linear-gradient(180deg,var(--blue-1) 0%, #e6f4ff 100%);} 
+    h1,h2{font-family:'Great Vibes',cursive;color:var(--accent)}
+    /* floating petals */
+    .petal{position:fixed;pointer-events:none;z-index:5;opacity:0.9;will-change:transform;}
+    /* save-the-date banner */
+    .save-banner{display:inline-block;padding:0.5rem 1rem;border-radius:999px;background:linear-gradient(90deg,var(--blue-2),#93c5fd);box-shadow:0 6px 18px rgba(30,58,138,0.12);transform-origin:center;animation:glow 3s ease-in-out infinite}
+    @keyframes glow{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.02)}100%{transform:translateY(0) scale(1)}}
+    /* fade-in */
+    .fade-in{opacity:0;transform:translateY(10px);transition:all 700ms cubic-bezier(.2,.9,.3,1)}
+    .fade-in.visible{opacity:1;transform:translateY(0)}
+    /* sticky nav */
+    nav{backdrop-filter: blur(6px);background:rgba(255,255,255,0.35)}
+    /* gallery */
+    .swipe-container{position:relative;overflow:hidden;border-radius:1rem}
+    .slides{display:flex;transition:transform .5s ease}
+    .slide{min-width:100%;height:360px;background-size:cover;background-position:center}
+    /* scroll-to-top */
+    #topBtn{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;padding:12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,0.15);display:none;z-index:40}
+    /* responsive tweaks */
+    @media(max-width:768px){.slide{height:220px}}
+  </style>
+</head>
+<body class="text-gray-800">
+
+  <!-- floating petals (JS will create elements) -->
+
+  <!-- NAV -->
+  <nav class="fixed w-full top-4 left-0 z-30 px-4">
+    <div class="max-w-4xl mx-auto flex items-center justify-between p-3 rounded-2xl">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-white/60 flex items-center justify-center shadow">
+          <span class="text-blue-800 font-semibold">J & F</span>
+        </div>
+        <div class="hidden md:block text-white">
+          <p class="text-sm">Jackson & Florence</p>
+        </div>
+      </div>
+      <div class="hidden md:flex gap-4 items-center">
+        <a href="#home" class="text-white hover:underline">Home</a>
+        <a href="#story" class="text-white hover:underline">Our Story</a>
+        <a href="#details" class="text-white hover:underline">Details</a>
+        <a href="#gallery" class="text-white hover:underline">Gallery</a>
+        <a href="#rsvp" class="text-white hover:underline">RSVP</a>
+        <button id="shareBtn" class="px-3 py-1 bg-white/90 text-blue-800 rounded-full shadow">Share</button>
+      </div>
+      <div class="md:hidden">
+        <button id="menuBtn" class="px-3 py-2 bg-white/90 text-blue-800 rounded-lg">Menu</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header id="home" class="min-h-[80vh] flex items-center justify-center py-24 relative">
+    <div class="max-w-3xl mx-auto text-center z-20 p-8 rounded-3xl shadow-2xl bg-white/80">
+      <div class="mb-2">
+        <span class="save-banner text-white font-semibold">Save the Date • 6th Dec 2025</span>
+      </div>
+      <h1 class="text-6xl md:text-7xl mt-4 text-blue-900">Jackson & Florence</h1>
+      <p class="mt-3 text-gray-700">Together with their families, they invite you to celebrate their marriage.</p>
+      <p class="mt-4 text-lg text-gray-800 font-semibold">Saturday, 6 December 2025 • 11:00 AM</p>
+      <p class="mt-1 text-sm text-gray-600">The Church of Jesus Christ of Latter-day Saints, Agona Swedru, Ekwamkrom</p>
+      <div class="mt-6 flex items-center justify-center gap-4">
+        <a href="#rsvp" class="px-6 py-3 bg-blue-700 text-white rounded-full shadow hover:bg-blue-800">RSVP</a>
+        <a href="#map" class="px-6 py-3 bg-white text-blue-800 rounded-full shadow hover:bg-blue-50">View Location</a>
+      </div>
+      <div class="mt-6 flex items-center justify-center gap-3">
+        <audio id="bgAudio" preload="none" loop>
+          <source src="assets/perfect.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+        <button id="audioBtn" class="px-4 py-2 bg-white text-blue-800 rounded-full shadow">Play Music</button>
+        <button id="muteBtn" class="px-3 py-2 bg-white text-blue-800 rounded-full shadow hidden">Pause</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- STORY -->
+  <section id="story" class="py-20 max-w-4xl mx-auto px-6 fade-in">
+    <h2 class="text-4xl text-center mb-6">Our Story</h2>
+    <p class="text-center text-gray-700 leading-relaxed">From the first hello to this beautiful moment, our journey has been filled with faith, laughter, and the grace of family. Through the seasons of life, we’ve learned that true love is patient, kind, and strengthened by prayer.
+With every shared smile, every quiet conversation, and every dream we’ve built together, we’ve seen God’s hand guiding our path.
+
+Now, as we prepare to begin our forever, we’re grateful for the love that brought us here and for the family and friends who have surrounded us with their support, encouragement, and joy. This day is not just our celebration, but a reflection of all the hearts that have helped us grow in love.</p>
+  </section>
+
+  <!-- DETAILS -->
+  <section id="details" class="py-12 bg-white/70">
+    <div class="max-w-3xl mx-auto px-6 text-center fade-in">
+      <h2 class="text-4xl mb-4">Event Details</h2>
+      <div class="grid md:grid-cols-2 gap-6 mt-6 text-left">
+        <div class="p-6 bg-blue-50 rounded-2xl shadow">
+          <h3 class="text-xl font-semibold">Ceremony</h3>
+          <p class="mt-2"><strong>Date:</strong> Saturday, 6th December 2025</p>
+          <p><strong>Time:</strong> 11:00 AM</p>
+          <p><strong>Venue:</strong> The Church of Jesus Christ of Latter-day Saints, Agona Swedru, Ekwamkrom</p>
+        </div>
+        <div class="p-6 bg-blue-50 rounded-2xl shadow">
+          <h3 class="text-xl font-semibold">Family</h3>
+          <p class="mt-2"><strong>Parents:</strong> Mr&Mrs Kumi & Mr&Mrs Ofosu</p>
+          <p><strong>Dress Code:</strong> Decent Elegant traditional or formal wear</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTDOWN -->
+  <section class="py-12 text-center">
+    <div class="max-w-3xl mx-auto px-6 fade-in">
+      <h2 class="text-3xl mb-4">Countdown</h2>
+      <div id="timer" class="text-2xl font-semibold text-blue-900"></div>
+    </div>
+  </section>
+
+  <!-- GALLERY (simple slider) -->
+  <section id="gallery" class="py-12">
+    <div class="max-w-4xl mx-auto px-6 fade-in">
+      <h2 class="text-3xl mb-6 text-center">Gallery</h2>
+      <div class="swipe-container" aria-hidden="false">
+        <div class="slides" id="slides">
+          <div class="slide" style="background-image:url('assets/photo1.jpg')"></div>
+          <div class="slide" style="background-image:url('assets/photo2.jpg')"></div>
+          <div class="slide" style="background-image:url('assets/photo3.jpg')"></div>
+        </div>
+        <div class="flex justify-between items-center mt-4">
+          <button id="prev" class="px-4 py-2 bg-white rounded-full shadow">Prev</button>
+          <button id="next" class="px-4 py-2 bg-white rounded-full shadow">Next</button>
+        </div>
+      </div>
+      <p class="text-sm mt-4 text-center text-gray-600">Click the arrows to browse photos. Replace assets/photoX.jpg with your photos.</p>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section id="map" class="py-12 bg-white/80">
+    <div class="max-w-4xl mx-auto px-6 text-center fade-in">
+      <h2 class="text-3xl mb-4">Location</h2>
+      <div class="rounded-xl overflow-hidden shadow">
+        <iframe src="https://www.google.com/maps?q=The+Church+of+Jesus+Christ+of+Latter-day+Saints,+Agona+Swedru,+Ekwamkrom&output=embed" style="width:100%;height:420px;border:0;" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUESTBOOK -->
+  <section id="guestbook" class="py-12 bg-white/70">
+    <div class="max-w-3xl mx-auto px-6 fade-in">
+      <h2 class="text-3xl mb-4 text-center">Guestbook</h2>
+      <form id="guestForm" class="max-w-xl mx-auto p-6 bg-blue-50 rounded-2xl shadow">
+        <input id="gName" class="w-full p-3 mb-3 rounded-md" placeholder="Your Name" required>
+        <textarea id="gMessage" class="w-full p-3 mb-3 rounded-md" placeholder="A short message for the couple" required></textarea>
+        <div class="flex gap-3">
+          <button type="submit" class="px-4 py-2 bg-blue-700 text-white rounded-full">Leave Message</button>
+          <button type="button" id="clearGuest" class="px-4 py-2 bg-white rounded-full">Clear</button>
+        </div>
+      </form>
+      <div id="messages" class="mt-6 space-y-4 max-w-xl mx-auto"></div>
+    </div>
+  </section>
+
+  <!-- RSVP -->
+  <section id="rsvp" class="py-12">
+    <div class="max-w-3xl mx-auto px-6 fade-in">
+      <h2 class="text-3xl mb-4 text-center">RSVP</h2>
+      <form id="rsvpForm" class="max-w-xl mx-auto p-6 bg-white/80 rounded-2xl shadow">
+        <input id="rName" class="w-full p-3 mb-3 rounded-md" placeholder="Your Name" required>
+        <input id="rEmail" type="email" class="w-full p-3 mb-3 rounded-md" placeholder="Your Email" required>
+        <select id="rChoice" class="w-full p-3 mb-3 rounded-md">
+          <option>Will attend</option>
+          <option>Unable to attend</option>
+        </select>
+        <input id="rGuests" type="number" min="0" class="w-full p-3 mb-3 rounded-md" placeholder="Number of guests (including you)">
+        <div class="flex gap-3">
+          <button class="px-4 py-2 bg-blue-700 text-white rounded-full">Send RSVP</button>
+          <button type="button" id="downloadList" class="px-4 py-2 bg-white rounded-full">Download RSVPs</button>
+        </div>
+      </form>
+      <div id="rsvpList" class="mt-6 max-w-xl mx-auto"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-6 text-center text-white bg-blue-800">
+    <p>With love — Jackson & Florence ❤️</p>
+    <p class="text-sm mt-2">© 2025 Jackson & Florence Wedding</p>
+  </footer>
+
+  <button id="topBtn" title="Back to top">↑</button>
+
+  <script>
+    /* --------------------------
+       FINAL SCRIPT (corrected)
+    ---------------------------*/
+
+    // small safe helper
+    function escapeHtml(s){
+      return String(s || '').replace(/[&<>"']/g, function(ch){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+      });
+    }
+
+    // --- Petals animation ---
+    (function createPetals(){
+      const petalCount = 18;
+      const petalImages = [
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="%23fff1f2" d="M12 2c2.5 2 6 6 4 9s-7 5-9 3-2-7 5-12z"/></svg>',
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="%23ffeef8" d="M10 1c1.5 1.2 4 4 3 6s-5 3-6 2-1.5-5 3-8z"/></svg>'
+      ];
+      for(let i=0;i<petalCount;i++){
+        const img = new Image();
+        img.src = petalImages[i % petalImages.length];
+        img.className = 'petal';
+        const size = 12 + Math.random() * 36;
+        img.style.width = size + 'px';
+        img.style.left = Math.random() * 100 + '%';
+        img.style.top = (Math.random() * -20) + '%';
+        img.style.opacity = 0.6 + Math.random() * 0.4;
+        document.body.appendChild(img);
+        const duration = 8000 + Math.random() * 14000;
+        const delay = Math.random() * -duration;
+        const rotate = Math.floor(Math.random() * 360);
+        img.animate([
+          { transform: `translateY(0) rotate(0deg)`, opacity: img.style.opacity },
+          { transform: `translateY(120vh) rotate(${rotate}deg)`, opacity: 0.4 }
+        ], { duration, iterations: Infinity, easing: 'linear', delay });
+      }
+    })();
+
+    // --- IntersectionObserver for fade-in ---
+    (function initIO(){
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+    })();
+
+    // --- Countdown ---
+    (function initCountdown(){
+      const weddingDate = new Date('December 6, 2025 11:00:00').getTime();
+      const timerEl = document.getElementById('timer');
+      if(!timerEl) return;
+      function updateTimer(){
+        const now = Date.now(); const diff = weddingDate - now;
+        if(diff <= 0){ timerEl.innerText = "It's our wedding day! 💍"; clearInterval(tI); return; }
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const s = Math.floor((diff % (1000*60)) / 1000);
+        timerEl.innerText = `${d}d ${h}h ${m}m ${s}s`;
+      }
+      updateTimer();
+      const tI = setInterval(updateTimer, 1000);
+    })();
+
+    // --- Audio controls ---
+    (function audioControls(){
+      const audio = document.getElementById('bgAudio');
+      const audioBtn = document.getElementById('audioBtn');
+      const muteBtn = document.getElementById('muteBtn');
+      if(!audio || !audioBtn || !muteBtn) return;
+      audioBtn.addEventListener('click', () => {
+        audio.play().then(() => {
+          audioBtn.classList.add('hidden'); muteBtn.classList.remove('hidden');
+        }).catch(() => {
+          alert('Playback blocked — please allow audio playback.');
+        });
+      });
+      muteBtn.addEventListener('click', () => {
+        audio.pause(); muteBtn.classList.add('hidden'); audioBtn.classList.remove('hidden');
+      });
+    })();
+
+    // --- Simple gallery slider ---
+    (function gallerySlider(){
+      const slides = document.getElementById('slides');
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      if(!slides || !prev || !next) return;
+      const total = slides.children.length;
+      let idx = 0;
+      next.addEventListener('click', () => { idx = (idx + 1) % total; slides.style.transform = `translateX(-${idx*100}%)`; });
+      prev.addEventListener('click', () => { idx = (idx - 1 + total) % total; slides.style.transform = `translateX(-${idx*100}%)`; });
+    })();
+
+    // ---------- Guestbook (posts to Google Sheet + local fallback) ----------
+    (function guestbookInit(){
+      const GUESTBOOK_WEBAPP = "https://script.google.com/macros/s/AKfycbxYsWHIPG0dcG2FNP9ZEmmaCxmftipkHIA2ao19WMo6Uq3btTHeK2AQ6JXgHz2P7tawzA/exec";
+      const gForm = document.getElementById('guestForm');
+      const gName = document.getElementById('gName');
+      const gMessage = document.getElementById('gMessage');
+      const messagesEl = document.getElementById('messages');
+      if(!gForm || !gName || !gMessage || !messagesEl) return;
+
+      function loadLocalMessages(){
+        try{
+          const arr = JSON.parse(localStorage.getItem('guestbook')||'[]');
+          messagesEl.innerHTML = '';
+          arr.slice().reverse().forEach(m => {
+            const el = document.createElement('div');
+            el.className = 'p-4 bg-white rounded-xl shadow';
+            el.innerHTML = `<p class="font-semibold">${escapeHtml(m.name)}</p><p class="text-sm text-gray-600">${escapeHtml(m.message)}</p><p class="text-xs text-gray-400 mt-2">${new Date(m.time).toLocaleString()}</p>`;
+            messagesEl.appendChild(el);
+          });
+        }catch(e){ console.warn('Failed to load local guestbook', e); messagesEl.innerHTML = ''; }
+      }
+      loadLocalMessages();
+
+      gForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = (gName.value || '').trim() || 'Anonymous';
+        const msg = (gMessage.value || '').trim();
+        if(!msg) return;
+
+        // 1) show immediately on page
+        const uiEl = document.createElement('div');
+        uiEl.className = 'p-4 bg-white rounded-xl shadow';
+        uiEl.innerHTML = `<p class="font-semibold">${escapeHtml(name)}</p><p class="text-sm text-gray-600">${escapeHtml(msg)}</p><p class="text-xs text-gray-400 mt-2">${new Date().toLocaleString()}</p>`;
+        messagesEl.prepend(uiEl);
+
+        // 2) save locally (fallback)
+        try{
+          const arr = JSON.parse(localStorage.getItem('guestbook')||'[]');
+          arr.push({ name, message: msg, time: Date.now() });
+          localStorage.setItem('guestbook', JSON.stringify(arr));
+        }catch(err){ console.warn('localStorage write failed', err); }
+
+        // reset form
+        gForm.reset();
+
+        // 3) send to Google Sheet (best-effort)
+        try{
+          const resp = await fetch(GUESTBOOK_WEBAPP, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, message: msg })
+          });
+          if(!resp.ok) console.warn('Guestbook save HTTP', resp.status);
+          else {
+            try { const json = await resp.json(); console.log('Guestbook saved', json); } catch(e){ console.log('Guestbook saved (no JSON)'); }
+          }
+        }catch(err){
+          console.error('Error sending guestbook to webapp:', err);
+        }
+      });
+
+      document.getElementById('clearGuest').addEventListener('click', () => {
+        if(!confirm('Clear all local guestbook messages? This will not remove messages already saved to Google Sheets.')) return;
+        localStorage.removeItem('guestbook');
+        messagesEl.innerHTML = '';
+      });
+    })();
+
+    // --- RSVP storage & download ---
+    (function rsvpInit(){
+      const rForm = document.getElementById('rsvpForm');
+      const rList = document.getElementById('rsvpList');
+      if(!rForm || !rList) return;
+      function loadRSVP(){
+        const arr = JSON.parse(localStorage.getItem('rsvps')||'[]');
+        rList.innerHTML = '';
+        arr.slice().reverse().forEach(r => {
+          const el = document.createElement('div');
+          el.className = 'p-3 bg-white rounded-md shadow mb-2';
+          el.innerHTML = `<strong>${escapeHtml(r.name)}</strong> — ${escapeHtml(r.choice)} <span class="text-xs text-gray-500">(${r.guests||1})</span><div class="text-xs text-gray-400">${new Date(r.time).toLocaleString()}</div>`;
+          rList.appendChild(el);
+        });
+      }
+      rForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const arr = JSON.parse(localStorage.getItem('rsvps')||'[]');
+        arr.push({
+          name: document.getElementById('rName').value,
+          email: document.getElementById('rEmail').value,
+          choice: document.getElementById('rChoice').value,
+          guests: document.getElementById('rGuests').value,
+          time: Date.now()
+        });
+        localStorage.setItem('rsvps', JSON.stringify(arr));
+        rForm.reset();
+        loadRSVP();
+        alert('RSVP saved locally. To collect responses automatically, I can connect this to Google Sheets or email.');
+      });
+      const dlBtn = document.getElementById('downloadList');
+      if(dlBtn){
+        dlBtn.addEventListener('click', () => {
+          const arr = JSON.parse(localStorage.getItem('rsvps')||'[]');
+          if(!arr.length){ alert('No RSVPs yet'); return; }
+          const csv = ['Name,Email,Choice,Guests,Time'];
+          arr.forEach(a => csv.push(`${a.name},${a.email},${a.choice},${a.guests},${new Date(a.time).toISOString()}`));
+          const blob = new Blob([csv.join('\n')], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a'); a.href = url; a.download = 'rsvps.csv'; a.click(); URL.revokeObjectURL(url);
+        });
+      }
+      loadRSVP();
+    })();
+
+    // --- Share button ---
+    (function shareInit(){
+      const shareBtn = document.getElementById('shareBtn');
+      if(!shareBtn) return;
+      shareBtn.addEventListener('click', async () => {
+        const shareData = { title: 'Jackson & Florence Wedding', text: 'Join us on 6th December 2025', url: location.href };
+        if(navigator.share){
+          try { await navigator.share(shareData); } catch(e) { console.log('share canceled'); }
+        } else {
+          try { await navigator.clipboard.writeText(location.href); alert('Link copied to clipboard!'); } catch(e) { prompt('Copy this link', location.href); }
+        }
+      });
+    })();
+
+    // --- Scroll to top ---
+    (function topBtnInit(){
+      const topBtn = document.getElementById('topBtn');
+      if(!topBtn) return;
+      window.addEventListener('scroll', ()=>{ topBtn.style.display = window.scrollY > 300 ? 'block' : 'none'; });
+      topBtn.addEventListener('click', ()=> window.scrollTo({ top: 0, behavior: 'smooth' }) );
+    })();
+
+    // --- mobile menu hint ---
+    (function menuHint(){
+      const menuBtn = document.getElementById('menuBtn');
+      if(!menuBtn) return;
+      menuBtn.addEventListener('click', ()=> alert('Use the navigation links to jump to sections. (I can add a mobile menu overlay if you want.)') );
+    })();
+
+  </script>
+</body>
+</html>
